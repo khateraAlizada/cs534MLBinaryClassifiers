@@ -36,8 +36,8 @@ def main():
     # Printing split results - TEMPORARY PRINTS
     print("X_train:", X_train)
     print("X_test:", X_test)
-    print("y_train:", Y_train)
-    print("y_test:", Y_test)
+    print("Y_train:", Y_train)
+    print("Y_test:", Y_test)
 
 
 if __name__ == "__main__":
