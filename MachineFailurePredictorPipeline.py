@@ -1,18 +1,17 @@
-from collections import Counter
-
 import sklearn
-from imblearn.under_sampling import RandomUnderSampler
-from sklearn.svm import SVC
-from sklearn.ensemble import BaggingClassifier
 import csv
+from sklearn import svm
+from sklearn.svm import SVC
+from collections import Counter
+from sklearn.metrics import f1_score
+from sklearn.ensemble import BaggingClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import cross_val_score
-from sklearn.metrics import f1_score
+from imblearn.under_sampling import RandomUnderSampler
 
 def main():
     X = []
     Y = []
-
 
     #df = pd.read_csv("ai4i2020.csv")
     #print(df)
@@ -46,37 +45,25 @@ def main():
     X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X_resampled,Y_resampled, test_size=.3, train_size=.7, random_state=None, shuffle=True,
                                              stratify=None)
 
-    #print(type(X_train))
-    #print(X_train[1])
-    #print(X_train[2])
-    clf = BaggingClassifier(estimator=SVC(),
-                            n_estimators=10, max_samples= 10, max_features=10, random_state=0).fit(X_train, y_train)
+    clf = svm.SVC(kernel='linear', C = 1).fit(X_train, y_train)
     print('Initial score')
     print(clf.score(X_train, y_train))
 
     #Tune hyperparameters
-    print('Tuning Hyperparameters')
-    param_grid = {'n_estimators': [1, 10, 25, 50],
-                  'max_samples' : [.01, .1, 1, 10, 50, 100],
-                  'max_features': [.02, .04, .06, .08, .1, .12]}
 
-    bag = BaggingClassifier(estimator=SVC())
-    clf = GridSearchCV(bag, param_grid)
+    param_grid = {'kernel': ['linear', 'poly', 'rbf', 'sigmoid'],
+                  'C' : [.0001, .001, .01, .1, 1, 10]}
 
+    print('Tuning Hyperparameters using 5 fold cross validation')
+    classifier = svm.SVC()
+    clf = GridSearchCV(classifier, param_grid, cv=5, scoring= 'f1')
 
     print('fitting tuned hyperparameters')
     clf.fit(X_train, y_train)
 
     print('Best parameters', clf.best_params_)
-    y_pred = clf.predict(X_train)
-    print('f1 score train: ', f1_score(y_train, y_pred, average='weighted'))
-
-    #5 fold cross validation score on training data
-    scores = cross_val_score(clf, X_train, y_train, cv=5, scoring='f1_weighted')
-    print("Cross validation score", scores)
-    print("%0.2f accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
-
-    y_pred = clf.predict(X_test)
+    best_estimator = clf.best_estimator_
+    y_pred = best_estimator.predict(X_test)
 
     print('f1 score test: ', f1_score(y_test, y_pred, average='weighted'))
 
