@@ -55,28 +55,24 @@ def main():
     print(clf.score(X_train, y_train))
 
     #Tune hyperparameters
-    print('Tuning Hyperparameters')
+    print('Tuning Hyperparameters with 5 fold cross validation')
     param_grid = {'n_estimators': [1, 10, 25, 50],
                   'max_samples' : [.01, .1, 1, 10, 50, 100],
                   'max_features': [.02, .04, .06, .08, .1, .12]}
 
     bag = BaggingClassifier(estimator=SVC())
-    clf = GridSearchCV(bag, param_grid)
-
+    clf = GridSearchCV(bag, param_grid, cv=5, scoring='f1')
 
     print('fitting tuned hyperparameters')
     clf.fit(X_train, y_train)
+    best_estimator = clf.best_estimator_
+    best_estimator.fit(X_train, y_train)
 
     print('Best parameters', clf.best_params_)
-    y_pred = clf.predict(X_train)
+    y_pred = best_estimator.predict(X_train)
     print('f1 score train: ', f1_score(y_train, y_pred, average='weighted'))
 
-    #5 fold cross validation score on training data
-    scores = cross_val_score(clf, X_train, y_train, cv=5, scoring='f1_weighted')
-    print("Cross validation score", scores)
-    print("%0.2f accuracy with a standard deviation of %0.2f" % (scores.mean(), scores.std()))
-
-    y_pred = clf.predict(X_test)
+    y_pred = best_estimator.predict(X_test)
 
     print('f1 score test: ', f1_score(y_test, y_pred, average='weighted'))
 
