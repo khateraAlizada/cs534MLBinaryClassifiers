@@ -12,13 +12,14 @@ def main():
     # Read in the CSV file
     with open("ai4i2020.csv", 'r') as file:
         csvreader = csv.reader(file)
-        header = next(csvreader)
+        next(csvreader)
+
         # Read each row and add the values to the arrays
         for row in csvreader:
             # Convert the string values to appropriate data types
             udi = int(row[0])
-            # product_id = row[1]
-            # Convert the 'Type' column to a numerical value (e.g. 'L' -> 1, 'M' -> 2, 'H' -> 3)
+            # product_id = row[1] # Omitted product ID
+            # Converting Type to integer equivalent: 'L' -> 1, 'M' -> 2, 'H' -> 3)
             if row[2] == 'L':
                 typ = 1
             elif row[2] == 'M':
@@ -48,11 +49,11 @@ def main():
     # Split the data into 70% training and 30% testing sets
     X_train, X_test, Y_train, Y_test = train_test_split(X_resampled, Y_resampled, test_size=0.3, random_state=42)
 
-    # Printing split results - TEMPORARY PRINTS
-    print("X_train:", X_train)
-    print("X_test:", X_test)
-    print("Y_train:", Y_train)
-    print("Y_test:", Y_test)
+    # Printing split results - Only used at the start of the project for confirmation
+    # print("X_train:", X_train)
+    # print("X_test:", X_test)
+    # print("Y_train:", Y_train)
+    # print("Y_test:", Y_test)
 
     random_forest_results = RandomForest(X_train, X_test, Y_train, Y_test)
 
@@ -91,6 +92,7 @@ def RandomForest(X_train, X_test, Y_train, Y_test):
                      + "\n    Best Parameter Set: " + str(grid_search.best_params_) \
                      + "\n    F1 Score on test Data: " + str(f1_score(Y_test, Y_pred))
 
+    # Get the F1 score on the testing data for later comparison
     final_f1_score = str(f1_score(Y_test, Y_pred))
 
     return [training_result, testing_result, final_f1_score]
