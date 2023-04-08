@@ -1,5 +1,3 @@
-from collections import Counter
-
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
@@ -46,9 +44,6 @@ def main():
     # Use RandomUnderSampler to get 339 datapoints with label 0 and 1
     sampler = RandomUnderSampler(sampling_strategy={0: 339, 1: 339})
     X_resampled, Y_resampled = sampler.fit_resample(X, Y)
-
-    # Resampled Data
-    resampled_rows = [header] + [list(X_resampled[i]) + [Y_resampled[i]] for i in range(len(X_resampled))]
 
     # Split the data into 70% training and 30% testing sets
     X_train, X_test, Y_train, Y_test = train_test_split(X_resampled, Y_resampled, test_size=0.3, random_state=42)
