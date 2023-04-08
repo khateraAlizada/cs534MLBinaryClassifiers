@@ -40,9 +40,7 @@ def main():
             rnf = int(row[13])
 
             # Add the values to the arrays
-            X.append(
-                [udi, typ, air_temp, process_temp, rotational_speed, torque, tool_wear, twf, hdf, pwf, osf,
-                 rnf])
+            X.append([udi, typ, air_temp, process_temp, rotational_speed, torque, tool_wear, twf, hdf, pwf, osf, rnf])
             Y.append(machine_failure)
 
     # Use RandomUnderSampler to get 339 datapoints with label 0 and 1
@@ -79,8 +77,7 @@ def RandomForest(X_train, X_test, Y_train, Y_test):
     }
 
     # Default DecisionTreeClassifier values
-    rf = RandomForestClassifier(n_estimators=100, criterion='gini', max_features='sqrt', max_depth=None,
-                                max_samples=1.0, random_state=42)
+    rf = RandomForestClassifier(n_estimators=100, criterion='gini', max_features='sqrt', max_depth=None, max_samples=1.0, random_state=42)
 
     # Grid Search w/ 5-fold cross validation
     grid_search = GridSearchCV(estimator=rf, param_grid=param_grid, cv=5, scoring='f1')
