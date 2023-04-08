@@ -61,7 +61,7 @@ def main():
     print("Y_train:", Y_train)
     print("Y_test:", Y_test)
 
-    RandomForest(X_train, X_test, Y_train, Y_test)
+    random_forest_results = RandomForest(X_train, X_test, Y_train, Y_test)
 
 
 def RandomForest(X_train, X_test, Y_train, Y_test):
@@ -75,23 +75,29 @@ def RandomForest(X_train, X_test, Y_train, Y_test):
     }
 
     # Default DecisionTreeClassifier values
-    rf = RandomForestClassifier(n_estimators=100, criterion='gini', max_features='sqrt', max_depth=None, max_samples=1.0, random_state=42)
+    rf = RandomForestClassifier(n_estimators=100, criterion='gini', max_features='sqrt', max_depth=None,
+                                max_samples=1.0, random_state=42)
 
     # Grid Search w/ 5-fold cross validation
     grid_search = GridSearchCV(estimator=rf, param_grid=param_grid, cv=5, scoring='f1')
     grid_search.fit(X_train, Y_train)
 
-    # Print best parameters and f1 score on training data
-    print("Random Forest: ")
-    print("    Best Parameter Set: ", grid_search.best_params_)
-    print("    F1 score on training data: ", grid_search.best_score_)
+    # Get the best parameters and f1 score on training data
+    training_result = "Random Forest: " \
+                      + "\n    Best Parameter Set: " + str(grid_search.best_params_) \
+                      + "\n    F1 score on training data: " + str(grid_search.best_score_)
 
-    # Print performance of the best parameter on test data
+    # Get the performance of the best parameter on test data
     best_rf = grid_search.best_estimator_
     Y_pred = best_rf.predict(X_test)
-    print("Random Forest: ")
-    print("    Best Parameter Set: ", grid_search.best_params_)
-    print("    F1 Score on test Data: ", f1_score(Y_test, Y_pred))
+
+    testing_result = "Random Forest: " \
+                     + "\n    Best Parameter Set: " + str(grid_search.best_params_) \
+                     + "\n    F1 Score on test Data: " + f1_score(Y_test, Y_pred)
+
+    final_f1_score = str(f1_score(Y_test, Y_pred))
+
+    return [training_result, testing_result, final_f1_score]
 
 
 if __name__ == "__main__":
