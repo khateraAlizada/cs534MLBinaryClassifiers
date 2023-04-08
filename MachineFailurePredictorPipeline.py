@@ -63,6 +63,10 @@ def main():
 
     random_forest_results = RandomForest(X_train, X_test, Y_train, Y_test)
 
+    print(random_forest_results[0])
+    print(random_forest_results[1])
+    print(random_forest_results[2])
+
 
 def RandomForest(X_train, X_test, Y_train, Y_test):
     # Values to be explored
