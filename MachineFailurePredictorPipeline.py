@@ -97,7 +97,7 @@ def RandomForest(X_train, X_test, Y_train, Y_test):
 
     testing_result = "Random Forest: " \
                      + "\n    Best Parameter Set: " + str(grid_search.best_params_) \
-                     + "\n    F1 Score on test Data: " + f1_score(Y_test, Y_pred)
+                     + "\n    F1 Score on test Data: " + str(f1_score(Y_test, Y_pred))
 
     final_f1_score = str(f1_score(Y_test, Y_pred))
 
