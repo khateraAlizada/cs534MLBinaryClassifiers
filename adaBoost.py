@@ -19,9 +19,38 @@ def main():
         csvreader = csv.reader(file)
         header = next(csvreader)
         for row in csvreader:
+            for row in csvreader:
+                # Convert the string values to appropriate data types
+                udi = int(row[0])
+                # product_id = row[1]
+                # Convert the 'Type' column to a numerical value (e.g. 'L' -> 1, 'M' -> 2, 'H' -> 3)
+                if row[2] == 'L':
+                    typ = 1
+                elif row[2] == 'M':
+                    typ = 2
+                else:
+                    typ = 3
+                air_temp = float(row[3])
+                process_temp = float(row[4])
+                rotational_speed = int(row[5])
+                torque = float(row[6])
+                tool_wear = int(row[7])
+                machine_failure = int(row[8])
+                twf = int(row[9])
+                hdf = int(row[10])
+                pwf = int(row[11])
+                osf = int(row[12])
+                rnf = int(row[13])
+
+                # Add the values to the arrays
+                X.append(
+                    [udi, typ, air_temp, process_temp, rotational_speed, torque, tool_wear, twf, hdf, pwf, osf,
+                     rnf])
+                Y.append(machine_failure)
+
             # Convert the values to float and append to the X list
-            X.append([float(i) for i in row[3:8]])
-            Y.append(int(row[8]))
+           # X.append([float(i) for i in row[3:8]])
+           # Y.append(int(row[8]))
     print(header)  # CSV Header - TEMPORARY PRINT
     print(Counter(Y))  # Before the filtering - TEMPORARY PRINT
 
