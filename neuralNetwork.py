@@ -68,11 +68,17 @@ def main():
     X_train, X_test, Y_train, Y_test = train_test_split(X_resampled, Y_resampled, test_size=0.3, random_state=42)
 
     # Define the hyperparameter grid to search over
+
+
     param_grid = {
-        'hidden_layer_sizes': [(10,), (20,), (30,)],
-        'alpha': [0.0001, 0.001, 0.01],
-        'learning_rate_init': [0.001, 0.01, 0.1]
+        'hidden_layer_sizes': [(10,), (50,), (100,), (10, 10), (50, 50), (100, 100)],
+        'activation': ['relu', 'logistic', 'tanh']
     }
+    # param_grid = {
+    #     'hidden_layer_sizes': [(10,), (20,), (30,)],
+    #     'alpha': [0.0001, 0.001, 0.01],
+    #     'learning_rate_init': [0.001, 0.01, 0.1]
+    # }
 
     # Initialize the MLPClassifier
     mlp = MLPClassifier(max_iter=1000)
